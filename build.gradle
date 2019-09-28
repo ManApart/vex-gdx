@@ -62,3 +62,13 @@ compileTestKotlin {
     }
 }
 
+sourceSets {
+    main {
+        java {
+            srcDirs 'src/main/kotlin'
+        }
+        resources {
+            srcDir 'src/main/resource'
+        }
+    }
+}

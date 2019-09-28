@@ -23,25 +23,19 @@ class GameScreen(private val game: Game) : Screen {
     }
 
     override fun render(delta: Float) {
-//        val minDelta = min(0.06f, Gdx.graphics.deltaTime)
-//        map.update(minDelta)
-//        Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1f)
-//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
-//        renderer.render(minDelta)
-//        controlRenderer.render()
-//
-//        if (map.bob.bounds.overlaps(map.endDoor.bounds)) {
-////            game.setScreen(GameOverScreen(game))
-//        }
-//
-//        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-////            game.setScreen(MainMenu(game))
-//        }
+        val minDelta = min(0.06f, Gdx.graphics.deltaTime)
+        map.update(minDelta)
+        Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1f)
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+        renderer.render(minDelta)
+        controlRenderer.render()
+
+//        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {}
     }
 
     override fun hide() {
-//        Gdx.app.debug("Vex", "dispose game screen")
-//        renderer.dispose()
-//        controlRenderer.dispose()
+        Gdx.app.debug("Vex", "dispose game screen")
+        renderer.dispose()
+        controlRenderer.dispose()
     }
 }
