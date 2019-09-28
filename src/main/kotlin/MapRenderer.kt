@@ -16,7 +16,6 @@ class MapRenderer(private val map: Map) {
     private val cam: OrthographicCamera = OrthographicCamera(24f, 16f)
     private val cache: SpriteCache
     private val batch = SpriteBatch(5460)
-    private val renderer = ImmediateModeRenderer20(false, true, 0)
     private val blocks: Array<IntArray>
     private val tile = TextureRegion(Texture(loadFile("/data/tile.png")), 0, 0, 20, 20)
     private val playerTexture = Texture(loadFile("/data/bob.png"))

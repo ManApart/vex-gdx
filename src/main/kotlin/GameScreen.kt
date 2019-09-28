@@ -13,13 +13,10 @@ class GameScreen(private val game: Game) : Screen {
 
     private var map = Map()
     private var renderer = MapRenderer(map)
-    private var controlRenderer = OnscreenControlRenderer(map)
-
 
     override fun show() {
         map = Map()
         renderer = MapRenderer(map)
-        controlRenderer = OnscreenControlRenderer(map)
     }
 
     override fun render(delta: Float) {
@@ -28,7 +25,6 @@ class GameScreen(private val game: Game) : Screen {
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
         renderer.render(minDelta)
-        controlRenderer.render()
 
 //        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {}
     }
@@ -36,6 +32,5 @@ class GameScreen(private val game: Game) : Screen {
     override fun hide() {
         Gdx.app.debug("Vex", "dispose game screen")
         renderer.dispose()
-        controlRenderer.dispose()
     }
 }
