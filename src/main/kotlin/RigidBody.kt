@@ -1,8 +1,10 @@
+import com.badlogic.gdx.math.MathUtils.clamp
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 
 const val GRAVITY = 20.0f
-const val MAX_VEL = 6f
+const val MAX_X_VEL = 6f
+const val MAX_Y_VEL = 10f
 const val DAMP = 0.90f
 
 class RigidBody(private val map: Map, private val owner: RigidBodyOwner, width: Float, height: Float) {
@@ -15,8 +17,10 @@ class RigidBody(private val map: Map, private val owner: RigidBodyOwner, width: 
         accel.scl(deltaTime)
         vel.add(accel.x, accel.y)
         if (accel.x == 0f) vel.x *= DAMP
-        if (vel.x > MAX_VEL) vel.x = MAX_VEL
-        if (vel.x < -MAX_VEL) vel.x = -MAX_VEL
+
+        vel.x = clamp(vel.x, -MAX_X_VEL, MAX_X_VEL)
+        vel.y = clamp(vel.y, -MAX_Y_VEL, MAX_Y_VEL)
+
         vel.scl(deltaTime)
         tryMove()
         vel.scl(1.0f / deltaTime)

@@ -7,7 +7,7 @@ import org.lwjgl.input.Controller
 object Controller {
     val gamePad = registerController()
     const val deadZone = 0.3f
-    const val gamePadEnabled = false
+    const val gamePadEnabled = true
 
     val xAxis = Axis(gamePad, "X Axis", false, Button(Input.Keys.D, Input.Keys.RIGHT), Button(Input.Keys.A, Input.Keys.LEFT))
     val yAxis = Axis(gamePad, "Y Axis", true, Button(Input.Keys.W, Input.Keys.UP), Button(Input.Keys.S, Input.Keys.DOWN))
