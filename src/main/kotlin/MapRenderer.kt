@@ -18,21 +18,6 @@ class MapRenderer(private val map: Map) {
     private val batch = SpriteBatch(5460)
     private val blocks: Array<IntArray>
     private val tile = TextureRegion(Texture(loadFile("/data/tile.png")), 0, 0, 20, 20)
-    private val playerTexture = Texture(loadFile("/data/bob.png"))
-    private val split = TextureRegion(playerTexture).split(20, 20)[0]
-    private val mirror = TextureRegion(playerTexture).split(20, 20)[0]
-
-    init {
-        for (region in mirror)
-            region.flip(true, false)
-    }
-
-    private val playerLeft: Animation<TextureRegion> = Animation(0.1f, mirror[0], mirror[1])
-    private val playerRight: Animation<TextureRegion> = Animation(0.1f, split[0], split[1])
-    private val playerJumpLeft: Animation<TextureRegion> = Animation(0.1f, mirror[2], mirror[3])
-    private val playerJumpRight: Animation<TextureRegion> = Animation(0.1f, split[2], split[3])
-    private val playerIdleLeft: Animation<TextureRegion> = Animation(0.5f, mirror[0], mirror[4])
-    private val playerIdleRight: Animation<TextureRegion> = Animation(0.5f, split[0], split[4])
     private val fps = FPSLogger()
 
     private var stateTime = 0f
@@ -84,36 +69,10 @@ class MapRenderer(private val map: Map) {
         stateTime += deltaTime
         batch.projectionMatrix = cam.combined
         batch.begin()
-        renderPlayer()
+        map.player.draw(batch)
         batch.end()
         fps.log()
     }
-
-    private fun renderPlayer() {
-        var anim: Animation<TextureRegion> = playerLeft
-        var loop = true
-        if (map.player.state === PlayerState.RUN) {
-            anim = if (map.player.dir == LEFT)
-                playerLeft
-            else
-                playerRight
-        }
-        if (map.player.state === PlayerState.IDLE) {
-            anim = if (map.player.dir == LEFT)
-                playerIdleLeft
-            else
-                playerIdleRight
-        }
-        if (map.player.state === PlayerState.JUMP) {
-            anim = if (map.player.dir == LEFT)
-                playerJumpLeft
-            else
-                playerJumpRight
-        }
-
-        batch.draw(anim.getKeyFrame(map.player.stateTime, loop), map.player.pos.x, map.player.pos.y, 1.toFloat(), 1.toFloat())
-    }
-
 
     fun dispose() {
         cache.dispose()
