@@ -9,7 +9,8 @@ class Map {
     val tiles: Array<Array<Int>> = loadBinary()
 
     private fun loadBinary(): Array<Array<Int>> {
-        val pixelMap = Pixmap(loadFile("/data/small-level.png"))
+        val pixelMap = Pixmap(loadFile("/data/test-level.png"))
+//        val pixelMap = Pixmap(loadFile("/data/small-level.png"))
 //        val pixelMap = Pixmap(loadFile("/data/levels.png"))
         val tiles = Array(pixelMap.width) { Array(pixelMap.height) { 0 } }
         for (x in 0 until tiles.size) {
@@ -30,6 +31,10 @@ class Map {
 
     fun update(deltaTime: Float) {
         player.update(deltaTime)
+    }
+
+    fun getTile(x: Float, y: Float): Int {
+        return getTile(x.toInt(), y.toInt())
     }
 
     fun getTile(x: Int, y: Int): Int {

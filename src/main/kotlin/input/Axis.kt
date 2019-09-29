@@ -1,5 +1,7 @@
 package input
 
+import input.Controller.deadZone
+import input.Controller.gamePadEnabled
 import org.lwjgl.input.Controller
 import kotlin.math.abs
 
@@ -8,8 +10,7 @@ class Axis(
         axisName: String,
         private val inverted: Boolean = false,
         private val positiveButton: Button = Button(),
-        private val negativeButton: Button = Button(),
-        private val deadZone: Float = input.Controller.deadZone
+        private val negativeButton: Button = Button()
 ) {
     private val axisIndex = getAxisIndex(gamePad, axisName)
     var value = 0f
@@ -25,8 +26,9 @@ class Axis(
             positiveButton.isPressed -> 1f
             negativeButton.isPressed -> -1f
             abs(gamePad.getAxisValue(axisIndex)) < deadZone -> 0f
-            inverted -> -gamePad.getAxisValue(axisIndex)
-            else -> gamePad.getAxisValue(axisIndex)
+            gamePadEnabled && inverted -> -gamePad.getAxisValue(axisIndex)
+            gamePadEnabled -> gamePad.getAxisValue(axisIndex)
+            else -> 0f
         }
     }
 }

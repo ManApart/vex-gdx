@@ -8,8 +8,8 @@ object ControllerDebugger {
     private val ignoredAxes = listOf(4)
 
     fun update() {
-        debugButtons()
-        debugAxis()
+//        debugButtons()
+//        debugAxis()
     }
 
     private fun debugButtons() {

@@ -2,7 +2,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import input.Controller
-import kotlin.math.floor
+import kotlin.math.abs
 
 private const val ACCELERATION = 20f
 private const val JUMP_VELOCITY = 10f
@@ -35,7 +35,7 @@ class Player(private val map: Map, x: Float, y: Float) {
         vel.scl(1.0f / deltaTime)
 
         stateTime += deltaTime
-//        println("Player is: ${bounds.x}, ${bounds.y}")
+        println("Player is: ${bounds.x}, ${bounds.y}")
     }
 
     private fun processKeys() {
@@ -46,21 +46,14 @@ class Player(private val map: Map, x: Float, y: Float) {
         }
 
         when {
-            Controller.xAxis.value > 0 -> {
+            abs(Controller.xAxis.value) > 0 -> {
                 if (state != PlayerState.JUMP) state = PlayerState.RUN
-                dir = PlayerDirection.RIGHT
-                accel.x = ACCELERATION
+                dir = PlayerDirection.fromNumber(Controller.xAxis.value)
+                accel.x = ACCELERATION * Controller.xAxis.value
             }
-            Controller.xAxis.value < 0 -> {
-                if (state != PlayerState.JUMP) state = PlayerState.RUN
-                dir = PlayerDirection.LEFT
-                accel.x = -ACCELERATION
-            }
-            Controller.yAxis.value > 0 -> {
-                accel.y = ACCELERATION
-            }
-            Controller.yAxis.value < 0  -> {
-                accel.y = -ACCELERATION
+
+            abs(Controller.yAxis.value) > 0 -> {
+                accel.y = ACCELERATION * Controller.yAxis.value
             }
             else -> {
                 if (state != PlayerState.JUMP) state = PlayerState.IDLE
@@ -74,48 +67,70 @@ class Player(private val map: Map, x: Float, y: Float) {
     }
 
     private fun tryMove() {
-        bounds.x += vel.x
-        calculateXCollision()
-
-        bounds.y += vel.y
-        calculateYCollision()
+        moveX()
+        moveY()
     }
 
-    private fun calculateXCollision() {
-        if (vel.x > 0) {
-            val farEdge = (bounds.x + bounds.width).toInt()
-            val destTile = map.getTile(farEdge, bounds.y.toInt())
-            if (destTile == TILE) {
+    private fun moveX() {
+        if (collides(bounds, Vector2(vel.x, 0f))) {
+            if (vel.x > 0) {
+                collides(bounds, Vector2(vel.x, 0f))
+                val farEdge = (bounds.x + vel.x + bounds.width).toInt()
                 bounds.x = farEdge - bounds.width
                 vel.x = 0f
-            }
-        } else {
-            val destTile = map.getTile(bounds.x.toInt(), bounds.y.toInt())
-            if (destTile == TILE) {
-                bounds.x = bounds.x.toInt() + 1f
+            } else {
+                collides(bounds, Vector2(vel.x, 0f))
+                bounds.x = (bounds.x + vel.x).toInt() + 1f
                 vel.x = 0f
             }
+        } else {
+            bounds.x += vel.x
         }
-
     }
 
-    private fun calculateYCollision() {
-        if (vel.y > 0) {
-            val farEdge = (bounds.y + bounds.height).toInt()
-            val destTile = map.getTile(bounds.x.toInt(), farEdge)
-            if (destTile == TILE) {
+    private fun moveY() {
+        if (collides(bounds, Vector2(0f, vel.y))) {
+            if (vel.y > 0) {
+                collides(bounds, Vector2(0f, vel.y))
+                val farEdge = (bounds.y + vel.y + bounds.height).toInt()
                 bounds.y = farEdge - bounds.height
                 vel.y = 0f
-            }
-        } else {
-            val destTile = map.getTile(bounds.x.toInt(), bounds.y.toInt())
-            if (destTile == TILE) {
-                bounds.y = bounds.y.toInt() + 1f
+            } else {
+                collides(bounds, Vector2(0f, vel.y))
+                bounds.y = (bounds.y + vel.y).toInt() + 1f
                 vel.y = 0f
                 state = PlayerState.IDLE
                 grounded = true
             }
+        } else {
+            bounds.y += vel.y
         }
+    }
+
+    private fun collides(current: Rectangle, vel: Vector2): Boolean {
+        return collidesRight(current, vel) || collidesLeft(current, vel) || collidesUp(current, vel) || collidesDown(current, vel)
+    }
+
+    private fun collidesRight(current: Rectangle, vel: Vector2): Boolean {
+        val farEdge = current.x + current.width + vel.x - .1f
+        val destTile = map.getTile(farEdge, current.y + vel.y)
+        return vel.x >= 0 && destTile == TILE
+    }
+
+    private fun collidesLeft(current: Rectangle, vel: Vector2): Boolean {
+        val destTile = map.getTile(current.x + vel.x + .1f, current.y + vel.y)
+        return vel.x <= 0 && destTile == TILE
+    }
+
+    private fun collidesUp(current: Rectangle, vel: Vector2): Boolean {
+        val farEdge = current.y + vel.y + current.height - .1f
+        val destTile = map.getTile(current.x + vel.x, farEdge)
+        return vel.y >= 0 && destTile == TILE
+    }
+
+    private fun collidesDown(current: Rectangle, vel: Vector2): Boolean {
+        val destTile = map.getTile(current.x + vel.x, current.y + vel.y +.1f)
+        return vel.y >= 0 && destTile == TILE
     }
 
 }

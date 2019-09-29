@@ -34,7 +34,7 @@ class Button(private val inputKeys: List<Int> = listOf(), private val gamePad: C
     }
 
     private fun isGamepadPressed(): Boolean {
-        if (gamePad == null) {
+        if (gamePad == null || !input.Controller.gamePadEnabled) {
             return false
         }
         return gamePadButtonIds.any {gamePad.isButtonPressed(it)}
