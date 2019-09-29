@@ -1,10 +1,5 @@
 ## TODO
 
-Un-invert map y coordinate
-get jump to re-recognize ground
-
-
-
 
 
 

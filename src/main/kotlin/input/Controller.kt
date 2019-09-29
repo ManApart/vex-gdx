@@ -1,24 +1,27 @@
 package input
 
 import com.badlogic.gdx.Input
+import org.lwjgl.input.Controllers
+import org.lwjgl.input.Controller
 
 object Controller {
-    //        Controllers.getController(0).getAxisName()
-//    val leftStick
-//    val gamePad = Controllers.getController(0)
+    val gamePad = registerController()
+    const val deadZone = 0.3f
 
-    val leftButton = Button(Input.Keys.A, Input.Keys.LEFT)
-    val rightButton = Button(Input.Keys.D, Input.Keys.RIGHT)
-    val upButton = Button(Input.Keys.W, Input.Keys.UP)
-    val downButton = Button(Input.Keys.S, Input.Keys.DOWN)
-    val jumpButton = Button(Input.Keys.SPACE)
+    val xAxis = Axis(gamePad, "X Axis", false, Button(Input.Keys.D, Input.Keys.RIGHT), Button(Input.Keys.A, Input.Keys.LEFT))
+    val yAxis = Axis(gamePad, "Y Axis", true, Button(Input.Keys.W, Input.Keys.UP), Button(Input.Keys.S, Input.Keys.DOWN))
+
+    val jumpButton = Button(listOf(Input.Keys.SPACE), gamePad, listOf("Button 0"))
 
     fun update(deltaTime: Float) {
-        leftButton.update(deltaTime)
-        rightButton.update(deltaTime)
-        upButton.update(deltaTime)
-        downButton.update(deltaTime)
+        xAxis.update(deltaTime)
+        yAxis.update(deltaTime)
         jumpButton.update(deltaTime)
+    }
+
+    private fun registerController() : Controller{
+        Controllers.create()
+        return Controllers.getController(7)
     }
 
 }

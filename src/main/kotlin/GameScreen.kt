@@ -3,6 +3,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
 import input.Controller
+import input.ControllerDebugger
 import kotlin.math.min
 
 class GameScreen(private val game: Game) : Screen {
@@ -22,6 +23,7 @@ class GameScreen(private val game: Game) : Screen {
     override fun render(delta: Float) {
         val minDelta = min(0.06f, Gdx.graphics.deltaTime)
         Controller.update(minDelta)
+        ControllerDebugger.update()
         map.update(minDelta)
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)

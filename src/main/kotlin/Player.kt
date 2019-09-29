@@ -35,7 +35,7 @@ class Player(private val map: Map, x: Float, y: Float) {
         vel.scl(1.0f / deltaTime)
 
         stateTime += deltaTime
-        println("Player is: ${bounds.x}, ${bounds.y}")
+//        println("Player is: ${bounds.x}, ${bounds.y}")
     }
 
     private fun processKeys() {
@@ -46,20 +46,20 @@ class Player(private val map: Map, x: Float, y: Float) {
         }
 
         when {
-            Controller.leftButton.isPressed -> {
-                if (state != PlayerState.JUMP) state = PlayerState.RUN
-                dir = PlayerDirection.LEFT
-                accel.x = -ACCELERATION
-            }
-            Controller.rightButton.isPressed -> {
+            Controller.xAxis.value > 0 -> {
                 if (state != PlayerState.JUMP) state = PlayerState.RUN
                 dir = PlayerDirection.RIGHT
                 accel.x = ACCELERATION
             }
-            Controller.upButton.isPressed -> {
+            Controller.xAxis.value < 0 -> {
+                if (state != PlayerState.JUMP) state = PlayerState.RUN
+                dir = PlayerDirection.LEFT
+                accel.x = -ACCELERATION
+            }
+            Controller.yAxis.value > 0 -> {
                 accel.y = ACCELERATION
             }
-            Controller.downButton.isPressed -> {
+            Controller.yAxis.value < 0  -> {
                 accel.y = -ACCELERATION
             }
             else -> {
