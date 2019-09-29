@@ -22,19 +22,19 @@ class PlayerDrawable {
     private val idleLeftAnim: Animation<TextureRegion> = Animation(0.5f, mirror[0], mirror[4])
     private val idleRightAnim: Animation<TextureRegion> = Animation(0.5f, split[0], split[4])
 
-    fun draw(batch: SpriteBatch, bounds: Rectangle, state: PlayerState, facing: PlayerDirection, stateTime: Float) {
+    fun draw(batch: SpriteBatch, bounds: Rectangle, state: PlayerState, facing: Direction, stateTime: Float) {
         val anim = determineAnimation(state, facing)
         batch.draw(anim.getKeyFrame(stateTime, true), bounds.x - 0.2f, bounds.y, 1.toFloat(), 1.toFloat())
     }
 
-    private fun determineAnimation(state: PlayerState, facing: PlayerDirection): Animation<TextureRegion> {
+    private fun determineAnimation(state: PlayerState, facing: Direction): Animation<TextureRegion> {
         return when {
-            state == PlayerState.RUN && facing == PlayerDirection.LEFT -> leftAnim
-            state == PlayerState.RUN && facing == PlayerDirection.RIGHT -> rightAnim
-            state == PlayerState.IDLE && facing == PlayerDirection.LEFT -> idleLeftAnim
-            state == PlayerState.IDLE && facing == PlayerDirection.RIGHT -> idleRightAnim
-            state == PlayerState.JUMP && facing == PlayerDirection.LEFT -> jumpLeftAnim
-            state == PlayerState.JUMP && facing == PlayerDirection.RIGHT -> jumpRightAnim
+            state == PlayerState.RUN && facing == Direction.LEFT -> leftAnim
+            state == PlayerState.RUN && facing == Direction.RIGHT -> rightAnim
+            state == PlayerState.IDLE && facing == Direction.LEFT -> idleLeftAnim
+            state == PlayerState.IDLE && facing == Direction.RIGHT -> idleRightAnim
+            state == PlayerState.JUMP && facing == Direction.LEFT -> jumpLeftAnim
+            state == PlayerState.JUMP && facing == Direction.RIGHT -> jumpRightAnim
             else -> idleLeftAnim
         }
     }

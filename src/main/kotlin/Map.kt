@@ -5,7 +5,7 @@ const val TILE = 0xffffff
 const val SPAWN = 6524333
 
 class Map {
-    val player = Player(this, 3f, 2f)
+    val player = Player(this)
     val tiles: Array<Array<Int>> = loadBinary()
 
     private fun loadBinary(): Array<Array<Int>> {
@@ -18,8 +18,8 @@ class Map {
             for (y in 0 until maxY) {
                 val pixel = pixelMap.getPixel(x, y).ushr(8) and 0xffffff
                 if (pixel == SPAWN){
-                    player.bounds.x = x.toFloat()
-                    player.bounds.y = (maxY -1 - y).toFloat()
+                    player.body.bounds.x = x.toFloat()
+                    player.body.bounds.y = (maxY -1 - y).toFloat()
                 }
 
                 //Invert the y here so it's logical everywhere else

@@ -1,8 +1,10 @@
-enum class PlayerDirection {
+enum class Direction {
     LEFT,
-    RIGHT;
+    RIGHT,
+    UP,
+    DOWN;
     companion object {
-        fun fromNumber(number: Float) : PlayerDirection {
+        fun fromNumber(number: Float) : Direction {
             return if (number > 0) {
                 RIGHT
             } else {

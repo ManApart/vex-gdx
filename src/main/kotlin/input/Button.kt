@@ -5,11 +5,15 @@ import com.badlogic.gdx.Gdx
 
 class Button(private val inputKeys: List<Int> = listOf(), private val gamePad: Controller? = null, inputNames: List<String> = listOf()) {
     constructor(vararg inputKeys: Int) : this(inputKeys.toList())
+
     private val gamePadButtonIds = getIds(gamePad, inputNames)
     var isPressed = false
     var isFirstFrameSinceChanged = false
     var stateTime = 0f
 
+    fun isFirstPressed(): Boolean {
+        return isPressed && isFirstFrameSinceChanged
+    }
 
     fun update(deltaTime: Float) {
         val pressed = isGamepadPressed() || inputKeys.any { Gdx.input.isKeyPressed(it) }
@@ -37,7 +41,7 @@ class Button(private val inputKeys: List<Int> = listOf(), private val gamePad: C
         if (gamePad == null || !input.Controller.gamePadEnabled) {
             return false
         }
-        return gamePadButtonIds.any {gamePad.isButtonPressed(it)}
+        return gamePadButtonIds.any { gamePad.isButtonPressed(it) }
     }
 
 }

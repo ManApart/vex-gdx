@@ -24,7 +24,7 @@ class MapRenderer(private val map: Map) {
     private var lerpTarget = Vector3()
 
     init {
-        this.cam.position.set(map.player.bounds.x, map.player.bounds.y, 0f)
+        this.cam.position.set(map.player.body.bounds.x, map.player.body.bounds.y, 0f)
     }
 
     private fun createBlocks(): Array<IntArray> {
@@ -54,7 +54,7 @@ class MapRenderer(private val map: Map) {
     }
 
     fun render(deltaTime: Float) {
-        cam.position.lerp(lerpTarget.set(map.player.bounds.x, map.player.bounds.y, 0f), 2f * deltaTime)
+        cam.position.lerp(lerpTarget.set(map.player.body.bounds.x, map.player.body.bounds.y, 0f), 2f * deltaTime)
         cam.update()
 
         cache.projectionMatrix = cam.combined
