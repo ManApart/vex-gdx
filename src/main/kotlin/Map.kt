@@ -5,7 +5,7 @@ const val TILE = 0xffffff
 
 class Map {
     val tiles: Array<Array<Int>> = loadBinary()
-    val player = Player(this, 11f, 155f)
+    val player = Player(this, 11f, 152f)
 //    val player = Player(this, 11f, 5f)
 
     private fun loadBinary(): Array<Array<Int>> {

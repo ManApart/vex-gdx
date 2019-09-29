@@ -1,3 +1,22 @@
+## TODO
+
+Un-invert map y coordinate
+get jump to re-recognize ground
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 libgdx-demo-cuboc
 =================
 ![cuboc](http://i.imgur.com/kv5oq5C.png)
