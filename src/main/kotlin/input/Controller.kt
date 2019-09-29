@@ -5,6 +5,8 @@ import com.badlogic.gdx.Input
 object Controller {
     //        Controllers.getController(0).getAxisName()
 //    val leftStick
+//    val gamePad = Controllers.getController(0)
+
     val leftButton = Button(Input.Keys.A, Input.Keys.LEFT)
     val rightButton = Button(Input.Keys.D, Input.Keys.RIGHT)
     val upButton = Button(Input.Keys.W, Input.Keys.UP)

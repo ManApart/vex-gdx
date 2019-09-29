@@ -24,7 +24,7 @@ class Player(private val map: Map, x: Float, y: Float) {
     fun update(deltaTime: Float) {
         processKeys()
 
-        accel.y = -GRAVITY
+//        accel.y = -GRAVITY
         accel.scl(deltaTime)
         vel.add(accel.x, accel.y)
         if (accel.x == 0f) vel.x *= DAMP
@@ -75,31 +75,40 @@ class Player(private val map: Map, x: Float, y: Float) {
 
     private fun tryMove() {
         bounds.x += vel.x
+//        calculateXCollision()
+
+        bounds.y += vel.y
+//        calculateYCollision()
+    }
+
+    private fun calculateXCollision() {
         if (vel.x > 0) {
             val farEdge = (bounds.x + bounds.width).toInt()
-            val destTile = getTile(farEdge, bounds.y.toInt())
+            val destTile = map.getTile(farEdge, bounds.y.toInt())
             if (destTile == TILE) {
                 bounds.x = farEdge - bounds.width
                 vel.x = 0f
             }
         } else {
-            val destTile = getTile(bounds.x.toInt(), bounds.y.toInt())
+            val destTile = map.getTile(bounds.x.toInt(), bounds.y.toInt())
             if (destTile == TILE) {
                 bounds.x = bounds.x.toInt() + 1f
                 vel.x = 0f
             }
         }
 
-        bounds.y += vel.y
+    }
+
+    private fun calculateYCollision() {
         if (vel.y > 0) {
             val farEdge = (bounds.y + bounds.height).toInt()
-            val destTile = getTile(bounds.x.toInt(), farEdge)
+            val destTile = map.getTile(bounds.x.toInt(), farEdge)
             if (destTile == TILE) {
                 bounds.y = farEdge - bounds.height
                 vel.y = 0f
             }
         } else {
-            val destTile = getTile(bounds.x.toInt(), bounds.y.toInt())
+            val destTile = map.getTile(bounds.x.toInt(), bounds.y.toInt())
             if (destTile == TILE) {
                 bounds.y = bounds.y.toInt() + 1f
                 vel.y = 0f
@@ -107,13 +116,6 @@ class Player(private val map: Map, x: Float, y: Float) {
                 grounded = true
             }
         }
-    }
-
-    private fun getTile(x: Int, y: Int): Int {
-        if (x < 0 || x >= map.tiles.size || y < 0 || y >= map.tiles[x].size) {
-            return 0
-        }
-        return map.tiles[x][map.tiles[x].size - 1 - y]
     }
 
 }
