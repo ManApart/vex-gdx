@@ -46,10 +46,8 @@ class MapRenderer(private val map: Map) {
     private fun buildChunk(chunkX: Int, chunkY: Int, cache: SpriteCache) {
         for (x in chunkX * viewportWidth until chunkX * viewportWidth + viewportWidth) {
             for (y in chunkY * viewportHeight until chunkY * viewportHeight + viewportHeight) {
-                if (map.getTileInverted(x, y) == TILE) {
-                    val posY = map.tiles[0].size - y - 1
-                    cache.add(tileTextureRegion, x.toFloat(), posY.toFloat(), 1f, 1f)
-                    //                        if (map.tiles[x][posY] == TILE) cache.add(tile, x.toFloat(), y.toFloat(), 1f, 1f)
+                if (map.getTile(x, y) == TILE) {
+                    cache.add(tileTextureRegion, x.toFloat(), y.toFloat(), 1f, 1f)
                 }
             }
         }

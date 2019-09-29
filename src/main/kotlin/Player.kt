@@ -24,7 +24,7 @@ class Player(private val map: Map, x: Float, y: Float) {
     fun update(deltaTime: Float) {
         processKeys()
 
-//        accel.y = -GRAVITY
+        accel.y = -GRAVITY
         accel.scl(deltaTime)
         vel.add(accel.x, accel.y)
         if (accel.x == 0f) vel.x *= DAMP
@@ -75,10 +75,10 @@ class Player(private val map: Map, x: Float, y: Float) {
 
     private fun tryMove() {
         bounds.x += vel.x
-//        calculateXCollision()
+        calculateXCollision()
 
         bounds.y += vel.y
-//        calculateYCollision()
+        calculateYCollision()
     }
 
     private fun calculateXCollision() {
