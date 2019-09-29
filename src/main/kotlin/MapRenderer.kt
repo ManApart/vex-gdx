@@ -24,7 +24,7 @@ class MapRenderer(private val map: Map) {
     private var lerpTarget = Vector3()
 
     init {
-        this.cam.position.set(map.player.pos.x, map.player.pos.y, 0f)
+        this.cam.position.set(map.player.bounds.x, map.player.bounds.y, 0f)
         this.cache = SpriteCache(this.map.tiles.size * this.map.tiles[0].size, false)
         this.blocks = Array(ceil(this.map.tiles.size / 24.0f).toInt()) { IntArray(ceil(this.map.tiles[0].size / 16.0f).toInt()) }
 
@@ -43,6 +43,7 @@ class MapRenderer(private val map: Map) {
                         if (y > height) continue
                         val posY = height - y - 1
                         if (map.tiles[x][y] == TILE) cache.add(tile, x.toFloat(), posY.toFloat(), 1f, 1f)
+//                        if (map.tiles[x][posY] == TILE) cache.add(tile, x.toFloat(), y.toFloat(), 1f, 1f)
                     }
                 }
                 blocks[blockX][blockY] = cache.endCache()
@@ -52,7 +53,7 @@ class MapRenderer(private val map: Map) {
     }
 
     fun render(deltaTime: Float) {
-        cam.position.lerp(lerpTarget.set(map.player.pos.x, map.player.pos.y, 0f), 2f * deltaTime)
+        cam.position.lerp(lerpTarget.set(map.player.bounds.x, map.player.bounds.y, 0f), 2f * deltaTime)
         cam.update()
 
         cache.projectionMatrix = cam.combined

@@ -1,10 +1,7 @@
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import input.Controller
-import kotlin.math.abs
 import kotlin.math.floor
 
 private const val ACCELERATION = 20f
@@ -16,7 +13,7 @@ private const val DAMP = 0.90f
 class Player(private val map: Map, x: Float, y: Float) {
     private var accel = Vector2()
     private var vel = Vector2()
-    private var bounds = Rectangle(x, y, 0.6f, 0.8f)
+    var bounds = Rectangle(x, y, 0.6f, 0.8f)
 
     var state = PlayerState.IDLE
     var stateTime = 0f
@@ -27,7 +24,7 @@ class Player(private val map: Map, x: Float, y: Float) {
     fun update(deltaTime: Float) {
         processKeys()
 
-        accel.y = -GRAVITY
+//        accel.y = -GRAVITY
         accel.scl(deltaTime)
         vel.add(accel.x, accel.y)
         if (accel.x == 0f) vel.x *= DAMP
@@ -38,7 +35,7 @@ class Player(private val map: Map, x: Float, y: Float) {
         vel.scl(1.0f / deltaTime)
 
         stateTime += deltaTime
-//        println("Player is: ${pos.x}, ${pos.y}")
+        println("Player is: ${bounds.x}, ${bounds.y}")
     }
 
     private fun processKeys() {
@@ -72,28 +69,46 @@ class Player(private val map: Map, x: Float, y: Float) {
 
     private fun tryMove() {
         bounds.x += vel.x
-        fetchCollidableRects().forEach { rect ->
-            if (bounds.overlaps(rect)) {
-                if (vel.x < 0) {
-                    bounds.x = rect.x + rect.width + 0.01f
-                } else {
-                    bounds.x = rect.x - bounds.width - 0.01f
-                }
-                vel.x = 0f
-            }
+//        val destXTile = map.tiles[bounds.x.toInt()][bounds.y.toInt()]
+        val destXTile = map.tiles[bounds.x.toInt()][map.tiles[0].size -1 - bounds.y.toInt()]
+        bounds.x = when {
+            destXTile == TILE && vel.x > 0 -> bounds.x.toInt() - 0.1f
+            destXTile == TILE && vel.x < 0 -> bounds.x.toInt() + 1.1f
+            else -> bounds.x
         }
 
         bounds.y += vel.y
-        fetchCollidableRects().forEach { rect ->
-            if (bounds.overlaps(rect)) {
-                if (vel.y < 0) {
-                    bounds.y = rect.y + rect.height + 0.01f
-                } else {
-                    bounds.y = rect.y - bounds.height - 0.01f
-                }
-                vel.y = 0f
-            }
+//        val destYTile = map.tiles[bounds.x.toInt()][bounds.y.toInt()]
+        val destYTile = map.tiles[bounds.x.toInt()][map.tiles[0].size -1 - bounds.y.toInt()]
+        bounds.y = when {
+            destYTile == TILE && vel.y > 0 -> bounds.y.toInt() - 0.1f
+            destYTile == TILE && vel.y < 0 -> bounds.y.toInt() + 1.1f
+            else -> bounds.y
         }
+
+//        bounds.x += vel.x
+//        fetchCollidableRects().forEach { rect ->
+//            if (bounds.overlaps(rect)) {
+//                if (vel.x < 0) {
+//                    bounds.x = rect.x + rect.width + 0.01f
+//                } else {
+//                    bounds.x = rect.x - bounds.width - 0.01f
+//                }
+//                vel.x = 0f
+//            }
+//        }
+//
+//        bounds.y += vel.y
+//        fetchCollidableRects().forEach { rect ->
+//            if (bounds.overlaps(rect)) {
+//                if (vel.y < 0) {
+//                    bounds.y = rect.y + rect.height + 0.01f
+//                } else {
+//                    bounds.y = rect.y - bounds.height - 0.01f
+//                }
+//                vel.y = 0f
+//            }
+//        }
     }
 
     private fun fetchCollidableRects(): List<Rectangle> {
