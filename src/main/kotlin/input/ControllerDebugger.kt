@@ -5,7 +5,7 @@ import kotlin.math.abs
 object ControllerDebugger {
     private val gamePad = Controller.gamePad
     private val ignoredButtons = listOf<Int>()
-    private val ignoredAxes = listOf(4)
+    private val ignoredAxes: List<Int> = listOf()
 
     fun update() {
 //        debugButtons()

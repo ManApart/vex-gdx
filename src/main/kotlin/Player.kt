@@ -18,7 +18,7 @@ class Player(map: Map) : RigidBodyOwner {
 
 
     override fun onCollided(direction: Direction) {
-        println("Collided $direction")
+//        println("Collided $direction")
         if (direction == Direction.DOWN) {
             state = PlayerState.IDLE
             grounded = true
@@ -27,7 +27,7 @@ class Player(map: Map) : RigidBodyOwner {
     }
 
     override fun onNoLongerCollided(direction: Direction) {
-        println("No longer Collided $direction")
+//        println("No longer Collided $direction")
     }
 
     fun update(deltaTime: Float) {
@@ -41,7 +41,7 @@ class Player(map: Map) : RigidBodyOwner {
     }
 
     private fun processKeys() {
-        if (Controller.jumpButton.isFirstPressed()) {
+        if (Controller.jump.isFirstPressed()) {
             if (state != PlayerState.JUMP) {
                 state = PlayerState.JUMP
                 body.vel.y = JUMP_VELOCITY
