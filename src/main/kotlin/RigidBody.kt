@@ -2,7 +2,7 @@ import com.badlogic.gdx.math.MathUtils.clamp
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 
-const val GRAVITY = 20.0f
+//const val GRAVITY = 20.0f
 const val MAX_X_VEL = 6f
 const val MAX_Y_VEL = 10f
 const val DAMP = 0.90f
@@ -40,7 +40,7 @@ class RigidBody(private val map: Map, private val owner: RigidBodyOwner, width: 
     }
 
     fun update(deltaTime: Float) {
-        accel.y = -GRAVITY
+//        accel.y = -GRAVITY
         accel.scl(deltaTime)
         vel.add(accel.x, accel.y)
         if (accel.x == 0f) vel.x *= DAMP

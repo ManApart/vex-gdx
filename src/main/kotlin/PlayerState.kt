@@ -1,5 +1,13 @@
 enum class PlayerState {
     IDLE,
-    RUN,
-    JUMP,
+    RUNING,
+    JUMPING,
+    FALLING,
+    DASHING,
+    GRAPPLING,
+    WALL_RUNNING;
+
+    fun isInState(vararg states: PlayerState): Boolean {
+        return states.contains(this)
+    }
 }

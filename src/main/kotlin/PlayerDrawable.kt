@@ -29,12 +29,12 @@ class PlayerDrawable {
 
     private fun determineAnimation(state: PlayerState, facing: Direction): Animation<TextureRegion> {
         return when {
-            state == PlayerState.RUN && facing == Direction.LEFT -> leftAnim
-            state == PlayerState.RUN && facing == Direction.RIGHT -> rightAnim
+            state == PlayerState.RUNING && facing == Direction.LEFT -> leftAnim
+            state == PlayerState.RUNING && facing == Direction.RIGHT -> rightAnim
             state == PlayerState.IDLE && facing == Direction.LEFT -> idleLeftAnim
             state == PlayerState.IDLE && facing == Direction.RIGHT -> idleRightAnim
-            state == PlayerState.JUMP && facing == Direction.LEFT -> jumpLeftAnim
-            state == PlayerState.JUMP && facing == Direction.RIGHT -> jumpRightAnim
+            state.isInState(PlayerState.JUMPING, PlayerState.FALLING, PlayerState.DASHING) && facing == Direction.LEFT -> jumpLeftAnim
+            state.isInState(PlayerState.JUMPING, PlayerState.FALLING, PlayerState.DASHING) && facing == Direction.RIGHT -> jumpRightAnim
             else -> idleLeftAnim
         }
     }
