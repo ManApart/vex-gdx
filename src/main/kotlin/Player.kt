@@ -18,11 +18,16 @@ class Player(map: Map) : RigidBodyOwner {
 
 
     override fun onCollided(direction: Direction) {
+        println("Collided $direction")
         if (direction == Direction.DOWN) {
             state = PlayerState.IDLE
             grounded = true
             hasDoubleJump = true
         }
+    }
+
+    override fun onNoLongerCollided(direction: Direction) {
+        println("No longer Collided $direction")
     }
 
     fun update(deltaTime: Float) {

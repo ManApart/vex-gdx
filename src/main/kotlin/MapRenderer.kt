@@ -71,7 +71,7 @@ class MapRenderer(private val map: Map) {
         batch.begin()
         map.player.draw(batch)
         batch.end()
-        fps.log()
+//        fps.log()
     }
 
     fun dispose() {

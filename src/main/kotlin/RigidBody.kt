@@ -11,6 +11,33 @@ class RigidBody(private val map: Map, private val owner: RigidBodyOwner, width: 
     var accel = Vector2()
     var vel = Vector2()
     var bounds = Rectangle(0f, 0f, width, height)
+    private val collided = createCollidedMap()
+
+    private fun createCollidedMap(): MutableMap<Direction, Boolean> {
+        val map = mutableMapOf<Direction, Boolean>()
+        Direction.values().forEach { map[it] = false }
+        return map
+    }
+
+    fun isCollided(direction: Direction): Boolean {
+        return collided[direction]!!
+    }
+
+    private fun setNowCollided(direction: Direction) {
+        val wasCollided = isCollided(direction)
+        collided[direction] = true
+        if (!wasCollided) {
+            owner.onCollided(direction)
+        }
+    }
+
+    private fun setNoLongerCollided(direction: Direction) {
+        val wasCollided = isCollided(direction)
+        collided[direction] = false
+        if (wasCollided) {
+            owner.onNoLongerCollided(direction)
+        }
+    }
 
     fun update(deltaTime: Float) {
         accel.y = -GRAVITY
@@ -34,43 +61,62 @@ class RigidBody(private val map: Map, private val owner: RigidBodyOwner, width: 
     private fun moveX() {
         if (collides(bounds, Vector2(vel.x, 0f))) {
             if (vel.x > 0) {
-                collides(bounds, Vector2(vel.x, 0f))
                 val farEdge = (bounds.x + vel.x + bounds.width).toInt()
                 bounds.x = farEdge - bounds.width
                 vel.x = 0f
-                owner.onCollided(Direction.RIGHT)
+                setNowCollided(Direction.RIGHT)
+                checkDirectionNoLongerCollides(Direction.LEFT)
             } else {
-                collides(bounds, Vector2(vel.x, 0f))
                 bounds.x = (bounds.x + vel.x).toInt() + 1f
                 vel.x = 0f
-                owner.onCollided(Direction.LEFT)
+                setNowCollided(Direction.LEFT)
+                checkDirectionNoLongerCollides(Direction.RIGHT)
             }
         } else {
             bounds.x += vel.x
+            checkDirectionNoLongerCollides(Direction.LEFT)
+            checkDirectionNoLongerCollides(Direction.RIGHT)
         }
     }
 
     private fun moveY() {
         if (collides(bounds, Vector2(0f, vel.y))) {
             if (vel.y > 0) {
-                collides(bounds, Vector2(0f, vel.y))
                 val farEdge = (bounds.y + vel.y + bounds.height).toInt()
                 bounds.y = farEdge - bounds.height
                 vel.y = 0f
-                owner.onCollided(Direction.UP)
+                setNowCollided(Direction.UP)
+                checkDirectionNoLongerCollides(Direction.DOWN)
             } else {
-                collides(bounds, Vector2(0f, vel.y))
                 bounds.y = (bounds.y + vel.y).toInt() + 1f
                 vel.y = 0f
-                owner.onCollided(Direction.DOWN)
+                setNowCollided(Direction.DOWN)
+                checkDirectionNoLongerCollides(Direction.UP)
             }
         } else {
             bounds.y += vel.y
+            checkDirectionNoLongerCollides(Direction.UP)
+            checkDirectionNoLongerCollides(Direction.DOWN)
+        }
+    }
+
+    private fun checkDirectionNoLongerCollides(direction: Direction) {
+        if (!collides(direction, bounds, direction.vector * .2f)) {
+            setNoLongerCollided(direction)
         }
     }
 
     private fun collides(current: Rectangle, vel: Vector2): Boolean {
         return collidesRight(current, vel) || collidesLeft(current, vel) || collidesUp(current, vel) || collidesDown(current, vel)
+    }
+
+    private fun collides(direction: Direction, current: Rectangle, vel: Vector2): Boolean {
+        return when (direction) {
+            Direction.RIGHT -> collidesRight(current, vel)
+            Direction.LEFT -> collidesLeft(current, vel)
+            Direction.UP -> collidesUp(current, vel)
+            Direction.DOWN -> collidesDown(current, vel)
+        }
     }
 
     private fun collidesRight(current: Rectangle, vel: Vector2): Boolean {
@@ -91,7 +137,7 @@ class RigidBody(private val map: Map, private val owner: RigidBodyOwner, width: 
     }
 
     private fun collidesDown(current: Rectangle, vel: Vector2): Boolean {
-        val destTile = map.getTile(current.x + vel.x, current.y + vel.y +.1f)
+        val destTile = map.getTile(current.x + vel.x, current.y + vel.y + .1f)
         return vel.y >= 0 && destTile == TILE
     }
 
